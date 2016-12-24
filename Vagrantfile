@@ -4,6 +4,11 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 1024
     v.cpus = 2
+    v.customize [
+        "storagectl", :id,
+        "--name", "SATA Controller",
+        "--hostiocache", "on"
+    ]
   end
   config.vm.box = "debian/jessie64"
   config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
@@ -14,7 +19,7 @@ Vagrant.configure("2") do |config|
     apt-get upgrade -y
     apt-get install -y build-essential curl autoconf texlive-latex-base texlive-font-utils texlive-latex-recommended
     apt-get install -y texlive-latex-extra bison expat netpbm doxygen unzip flex transfig python-pip python-dev
-    apt-get install -y libusb-1.0 libusb-dev libelf-dev libftdi-devcd 
+    apt-get install -y libusb-1.0 libusb-dev libelf-dev libftdi-devcd
     echo "********** Installing ARM build tools **********"
     echo "deb http://emdebian.org/tools/debian/ jessie main" >> /etc/apt/sources.list.d/crosstools.list
     curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | sudo apt-key add -
