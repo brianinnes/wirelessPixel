@@ -1,3 +1,14 @@
 .vagrant
 .DS_Store
 nogit
+ATTinyWirelessPixelReceiver/attRelease
+ATMegaWirelessPixel/atmRelease
+nrf24l01/atmRelease
+nrf24l01/attRelease
+nrf24l01/rspRelease
+nrf24l01/rsp1Release
+RpiWirelessPixel/rspRelease
+RpiWirelessPixel/rsp1Release
+RpiWirelessPixelReceiver/rspRelease
+RpiWirelessPixelReceiver/rsp1Release
+installKeys.sh
