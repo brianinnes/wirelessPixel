@@ -16,6 +16,7 @@ The build environment has been tested on macOS Sierra (10.12), Windows 10 and Li
 ### Mint Linux 18.1 issues
 - VirtualBox can be installed from the software manager, but Vagrant needs to be installed from the linked site otherwise the plugin will fail to install and the virtual machine will fail to build
 - if getting an issue regarding user uid differences edit file `.vagrant\machines\default\virtualbox\creator_uid` and set content to your user id (default is 1000)
+- Must install NFS sudo apt-get install nfs-kernel-server nfs-common portmap
 
 ## Building the cross-compile environment  
 Vagrant handles the complexities of creating a virtual machine and syncing a local folder into the virtual machine.  This allows code to be edited using native OS using a preferred editor then running the compiler inside the cross-compile environment.  

@@ -12,3 +12,4 @@ RpiWirelessPixel/rsp1Release
 RpiWirelessPixelReceiver/rspRelease
 RpiWirelessPixelReceiver/rsp1Release
 installKeys.sh
+local.mk
