@@ -61,6 +61,7 @@ Vagrant.configure("2") do |config|
     better_usbfilter_add(v, "03eb", "2104", "AAVRISP mkII")
     better_usbfilter_add(v, "0403", "6001", "FTDI TTL232R 3V3")
     better_usbfilter_add(v, "2a03", "0043", "Arduino UNO")
+    better_usbfilter_add(v, "16c0", "05dc", "USBasp")
     v.customize ["modifyvm", :id, "--usb", "on"]
     v.customize ["modifyvm", :id, "--usbxhci", "on"]
   end
@@ -105,6 +106,9 @@ ATTR{idVendor}=="03eb", ATTR{idProduct}=="2103", MODE="660", GROUP="dialout"
 ATTR{idVendor}=="03eb", ATTR{idProduct}=="2104", MODE="660", GROUP="dialout"
 # Atmel Corp. Dragon
 ATTR{idVendor}=="03eb", ATTR{idProduct}=="2107", MODE="660", GROUP="dialout"
+# USBasp
+ATTR{idVendor}=="16c0", ATTR{idProduct}=="05dc", MODE="660", GROUP="dialout"
+
 
 LABEL="avrisp_end"
 EOF
