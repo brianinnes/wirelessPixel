@@ -1,7 +1,7 @@
 #ifndef ATTINYSPI_H
 #define ATTINYSPI_H
 #include "spi.h"
-#include "attinyGpio.h"
+#include "atTinyGpio.h"
 #include <stdint.h>
 
 

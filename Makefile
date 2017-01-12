@@ -71,7 +71,7 @@ export MSG_INSTALLING = Installing binaries
 
 # Default target: make program!
 all: begin gccversion nrf24l01 ATTinyWirelessPixelReceiver \
-	ATmWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver end
+	ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver end
 
 begin:
 	@echo

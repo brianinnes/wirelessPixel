@@ -1,7 +1,7 @@
 #ifndef ATMEGASPI_H
 #define ATMEGASPI_H
 #include "spi.h"
-#include "atmegaGpio.h"
+#include "atMegaGpio.h"
 #include <stdint.h>
 
 
