@@ -547,12 +547,12 @@ inline uint8_t nrf24l01::getTxReuse() {
 
 
 inline uint8_t nrf24l01::getTxFull() {
-	return this->getBitRegister(reg_enum::REG_FIFO_STATUS, 5, 0x01);
+	return this->getBitRegister(reg_enum::REG_FIFO_STATUS, 5, 0x01, true);
 }
 
 
 inline uint8_t nrf24l01::getTxEmpty() {
-	return this->getBitRegister(reg_enum::REG_FIFO_STATUS, 4, 0x01);
+	return this->getBitRegister(reg_enum::REG_FIFO_STATUS, 4, 0x01, true);
 }
 
 

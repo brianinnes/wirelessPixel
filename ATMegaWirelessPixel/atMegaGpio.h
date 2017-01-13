@@ -10,11 +10,11 @@
 
 #include "gpio.h"
 
-class atmegaGpio:public Gpio
+class atMegaGpio:public Gpio
 {
 public:
-	atmegaGpio();
-	~atmegaGpio();
+	atMegaGpio();
+	~atMegaGpio();
 	void setPin(uint8_t p);
 	uint8_t setPinState(uint8_t s);
 
@@ -22,7 +22,7 @@ private:
 	uint8_t pin;
 };
 
-inline atmegaGpio::atmegaGpio() {};
-inline atmegaGpio::~atmegaGpio() {};
+inline atMegaGpio::atMegaGpio() {};
+inline atMegaGpio::~atMegaGpio() {};
 
 #endif /* ATTINYGPIO_H_ */

@@ -41,7 +41,7 @@ ATT_LDFLAGS = -ffunction-sections -Wl,--gc-sections,-Map=$(TARGET).map,--cref
 ATT_HEXSIZE = $(AVR_SIZE) --target=ihex $(TARGET).hex
 ATT_ELFSIZE = $(AVR_SIZE) -AC --mcu=attiny85 $(TARGET).elf
 ATT_FORMAT = ihex
-ATT_AVRDUDE_WRITE_FLASH = -pt85 -D -U flash:w:$(TARGET).hex:i
+ATT_AVRDUDE_WRITE_FLASH = -pt85 -U flash:w:$(TARGET).hex:i
 ATT_AVRDUDE_FUSES = -pt85 -D -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
 
 ATM_CLOCK = 16000000L

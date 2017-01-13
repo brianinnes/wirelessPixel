@@ -26,7 +26,7 @@ protected:
 
 private:
    uint8_t buffer[MAX_BUFFER];
-	 atmegaGpio *g;
+	 atMegaGpio *csn;
 };
 
 #endif

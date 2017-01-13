@@ -17,10 +17,13 @@ nrf24l01Data::~nrf24l01Data() {
 }
 
 void nrf24l01Data::initialise() {
+	radio->setEnCrc(0x01);
 	radio->setRfCh(0x62);
 	radio->setRxAddrP0(this->broadcastAddr);
 	radio->setRfPwr(rf_pwr_enum::RF_PWR_MIN);
 	radio->setArd(0x02);
+	radio->setArc(0x05);
+	radio->setRfDrHigh(0x01);
 	radio->setEnDpl(0x01);
 	radio->setDplP0(0x01);
 	radio->setEnAckPay(0x01);
@@ -66,4 +69,3 @@ uint8_t nrf24l01Data::isMessageAvailable() {
 void nrf24l01Data::getMessage(uint8_t *buf, uint8_t len) {
 	radio->readRXPayload(buf, len);
 }
-

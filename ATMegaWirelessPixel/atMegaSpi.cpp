@@ -13,20 +13,20 @@
 
 ATMegaSpi::ATMegaSpi()
 {
-	this->g = new atmegaGpio();
-	this->g->setPin(PORTB3);
+	this->csn = new atMegaGpio();
+	this->csn->setPin(PORTB2);
 }
 
 ATMegaSpi::~ATMegaSpi()
 {
-		delete this->g;
+		delete this->csn;
 }
 
 
 uint8_t ATMegaSpi::init()
 {
-	this->g->setPinState(1);
-	DDR_SPI |= (1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS);
+	this->csn->setPinState(1);
+	DDR_SPI |= (1<<DD_MOSI)|(1<<DD_SCK);
 	SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0);
 	return 0;
 }
@@ -37,7 +37,7 @@ void ATMegaSpi::close()
 
 void ATMegaSpi::setCmd(uint8_t cmd)
 {
-	this->g->setPinState(0);
+	this->csn->setPinState(0);
 	memset(this->buffer, 0, sizeof this->buffer);
 	this->buffer[0] = cmd;
 }
@@ -61,7 +61,7 @@ uint8_t ATMegaSpi::spiTransfer(uint8_t len)
 	for (int i = 0; i < len; i++) {
 		this->buffer[i] = this->transfer(this->buffer[i]);
 	}
-	this->g->setPinState(1);
+	this->csn->setPinState(1);
 	return buffer[0];
 }
 
