@@ -21,14 +21,13 @@ RSP_ASFLAGS =
 RSP_LDFLAGS =
 
 ATT_CLOCK = 8000000L
-ATT_CFLAGS = -g -O$(OPT) -w -std=gnu11 \
+ATT_CFLAGS = -g -Os -w -std=gnu11 \
 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
 -ffunction-sections -fdata-sections -MMD -flto \
 -DF_CPU=$(ATT_CLOCK) -Wa,-adhlns=$(<:.c=.lst) \
 -mmcu=attiny85 -Wl,--gc-sections \
-$(patsubst %,-I%,$(EXTRAINCDIRS))
-ATT_CXXFLAGS = -g -O$(OPT) \
--w -std=gnu++11 \
+$(patsubst %,-I%,$(ATT_EXTRAINCDIRS))
+ATT_CXXFLAGS = -g -Os -w -std=gnu++11 \
 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics \
 -MMD -Wl,--gc-sections \
 -DF_CPU=$(ATT_CLOCK) -mmcu=attiny85 \
@@ -153,7 +152,8 @@ rspRelease/%.d: %.c
 attRelease/%.hex: attRelease/%.elf
 	@echo
 	@echo $(MSG_FLASH) $@
-	$(AVR_OBJCOPY) -O $(ATT_FORMAT) -R .eeprom $< $@
+	$(AVR_STRIP) $< -o $<.stripped
+	$(AVR_OBJCOPY) -O $(ATT_FORMAT) -R .eeprom $<.stripped $@
 
 attRelease/%.eep: attRelease/%.elf
 	@echo
@@ -210,7 +210,8 @@ attRelease/%.d: %.c
 atmRelease/%.hex: atmRelease/%.elf
 	@echo
 	@echo $(MSG_FLASH) $@
-	$(AVR_OBJCOPY) -O $(ATM_FORMAT) -R .eeprom $< $@
+	$(AVR_STRIP) $< -o $<.stripped
+	$(AVR_OBJCOPY) -O $(ATM_FORMAT) -R .eeprom $<.stripped $@
 
 atmRelease/%.eep: atmRelease/%.elf
 	@echo
