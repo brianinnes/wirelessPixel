@@ -1,5 +1,5 @@
 #ifndef NRF24L01_H
-    #define NRF24L01_H
+#define NRF24L01_H
 
 #include "spi.h"
 #include "gpio.h"
@@ -457,7 +457,7 @@ inline uint8_t nrf24l01::getRxPNo() {
 
 
 inline uint8_t nrf24l01::getStatusTxFull() {
-	return this->getBitRegister(reg_enum::REG_STATUS, 0, 0x01);
+	return this->getBitRegister(reg_enum::REG_STATUS, 0, 0x01, true);
 }
 
 

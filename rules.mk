@@ -1,20 +1,20 @@
 RSP1_EXTRAINCDIRS = .
 RSP1_CFLAGS = -std=c11 -O3 -Wall -c -fmessage-length=0 \
               -I/opt/arm-bcm2708hardfp-linux-gnueabi/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr/include \
-	            -mabi=aapcs-linux -marm -mfloat-abi=hard \
-	            -I$(RSP_EXTRAINCDIRS)
+	            -mabi=aapcs-linux -marm -mfloat-abi=hard -DRPI \
+	            $(patsubst %,-I%,$(RSP1_EXTRAINCDIRS))
 RSP1_CXXFLAGS = -std=c++0x -O3 -Wall -c -fmessage-length=0 \
- 	-mabi=aapcs-linux -marm -mfloat-abi=hard \
-	-I/opt/arm-bcm2708hardfp-linux-gnueabi/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/include/c++/4.9.3 -I$(RSP_EXTRAINCDIRS)
+ 	-mabi=aapcs-linux -marm -mfloat-abi=hard -DRPI \
+	-I/opt/arm-bcm2708hardfp-linux-gnueabi/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/include/c++/4.9.3 $(patsubst %,-I%,$(RSP1_EXTRAINCDIRS))
 RSP1_ASFLAGS =
 RSP1_LDFLAGS =
 
 RSP_EXTRAINCDIRS = .
 RSP_CFLAGS = -std=c11 -O3 -Wall -c -fmessage-length=0 -I/usr/include/arm-linux-gnueabihf \
-	-mabi=aapcs-linux -marm -mfloat-abi=hard \
+	-mabi=aapcs-linux -marm -mfloat-abi=hard -DRPI \
 	-I$(RSP_EXTRAINCDIRS)
 RSP_CXXFLAGS = -std=c++0x -O3 -Wall -c -fmessage-length=0 \
- 	-mabi=aapcs-linux -marm -mfloat-abi=hard \
+ 	-mabi=aapcs-linux -marm -mfloat-abi=hard -DRPI \
 	-I/usr/include/arm-linux-gnueabihf $(patsubst %,-I%,$(RSP_EXTRAINCDIRS))
 # RSP_CXXFLAGS = -std=c++0x -O0 -fbuiltin -g -Wall -c -fmessage-length=0 -MMD -MP -I/usr/include/arm-linux-gnueabihf -mcpu=arm1176jzf-s -I$(RSP_EXTRAINCDIRS)
 RSP_ASFLAGS =

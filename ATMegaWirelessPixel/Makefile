@@ -8,8 +8,8 @@ include ../local.mk
 
 TARGET = atmRelease/ATmWirelessPixel
 
-ATM_EXTRAINCDIRS = ../nrf24l01
-ATM_LDFLAGS += -lnrf24l01 -L../nrf24l01/atmRelease
+ATM_EXTRAINCDIRS = ../nrf24l01 ../bdcstWirelessPixelTransmitter
+ATM_LDFLAGS += -lbdcstWirelessPixelTransmitter -L ../bdcstWirelessPixelTransmitter/atmRelease -lnrf24l01 -L../nrf24l01/atmRelease
 
 all: directories $(TARGET).elf $(TARGET).lss $(TARGET).sym \
 	$(TARGET).hex $(TARGET).eep

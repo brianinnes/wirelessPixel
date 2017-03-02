@@ -1,14 +1,14 @@
-CXXSRC = atTinySpi.cpp atTinyGpio.cpp fixup.cpp main.cpp
+CXXSRC = atTinySpi.cpp atTinyGpio.cpp atTinyPersist.cpp atTinyLedControl.cpp fixup.cpp main.cpp
 ASRC = RGBWriteOut.S
 AVR_OBJS    = $(CXXSRC:%.cpp=attRelease/%.o) $(ASRC:%.S=attRelease/%.o)
-ATT_EXTRAINCDIRS = ../nrf24l01
+ATT_EXTRAINCDIRS = ../nrf24l01 ../bdcstWirelessPixelReceiver
 
 include ../rules.mk
 include ../local.mk
 
 TARGET = attRelease/ATTinyWirelessPixelReceiver
 
-ATT_LDFLAGS += -lnrf24l01 -L../nrf24l01/attRelease
+ATT_LDFLAGS += -lbdcstWirelessPixelReceiver -lnrf24l01 -L../nrf24l01/attRelease -L../bdcstWirelessPixelReceiver/attRelease
 
 
 all: directories $(TARGET).elf $(TARGET).lss $(TARGET).sym \

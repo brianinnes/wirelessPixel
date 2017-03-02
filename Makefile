@@ -1,7 +1,8 @@
 include defs.mk
 
 # Default target: make program!
-all: begin gccversion nrf24l01 ATTinyWirelessPixelReceiver \
+all: begin gccversion nrf24l01 bdcstWirelessPixelReceiver \
+	bdcstWirelessPixelTransmitter ATTinyWirelessPixelReceiver \
 	ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver end
 
 begin:
@@ -17,6 +18,12 @@ end:
 
 nrf24l01:
 	$(MAKE) -w -C nrf24l01 all
+
+bdcstWirelessPixelReceiver:
+	$(MAKE) -w -C bdcstWirelessPixelReceiver all
+
+bdcstWirelessPixelTransmitter:
+		$(MAKE) -w -C bdcstWirelessPixelTransmitter all
 
 ATTinyWirelessPixelReceiver:
 	$(MAKE) -w -C ATTinyWirelessPixelReceiver all
@@ -35,7 +42,7 @@ gccversion :
 	@$(CC) --version
 	@$(CXX) --version
 
-install: nrf24l01 ATTinyWirelessPixelReceiver ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver
+install: nrf24l01 bdcstWirelessPixelReceiver bdcstWirelessPixelTransmitter ATTinyWirelessPixelReceiver ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver
 	@echo $(MSG_INSTALLING)
 	$(MAKE) -w -C ATTinyWirelessPixelReceiver install
 	$(MAKE) -w -C ATMegaWirelessPixel install
@@ -65,12 +72,15 @@ clean_list :
 	$(REMOVE) $(SRC:.c=.d)
 	$(REMOVE) *~
 	$(MAKE) -w -C nrf24l01 clean
+	$(MAKE) -w -C bdcstWirelessPixelReceiver clean
+	$(MAKE) -w -C bdcstWirelessPixelTransmitter clean
 	$(MAKE) -w -C ATTinyWirelessPixelReceiver clean
 	$(MAKE) -w -C ATMegaWirelessPixel clean
 	$(MAKE) -w -C RpiWirelessPixel clean
 	$(MAKE) -w -C RpiWirelessPixelReceiver clean
 
 # Listing of phony targets.
-.PHONY : all gccversion clean clean_list nrf24l01 ATTinyWirelessPixelReceiver \
-		ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver install \
-		begin finished end
+.PHONY : all gccversion clean clean_list nrf24l01 bdcstWirelessPixelReceiver \
+		bdcstWirelessPixelTransmitter ATTinyWirelessPixelReceiver \
+		ATMegaWirelessPixel RpiWirelessPixel RpiWirelessPixelReceiver \
+		install begin finished end

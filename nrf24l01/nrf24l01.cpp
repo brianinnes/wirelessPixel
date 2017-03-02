@@ -23,6 +23,7 @@ void nrf24l01::readRXPayload(uint8_t *buf, uint8_t len) {
 }
 
 void nrf24l01::writeTXPayload(uint8_t *buf, uint8_t len) {
+	while (0 < this->getStatusTxFull()) {;}
 	spi->setCmd(CMD_W_TX_PAYLOAD);
 	spi->setCmdData(buf, len);
 	spi->spiTransfer(len+1);
@@ -57,12 +58,14 @@ uint8_t nrf24l01::readRxPayloadWidth() {
 }
 
 void nrf24l01::writeAckPayload(uint8_t pipe, uint8_t *buf, uint8_t len) {
+	while (0 < this->getStatusTxFull()) {;}
 	spi->setCmd(CMD_W_ACK_PAYLOAD | (pipe & 0x07));
 	spi->setCmdData(buf, len);
 	spi->spiTransfer(len+1);
 	this->reg_status = buf[0];
 }
 void nrf24l01::writeNoAck(uint8_t *buf, uint8_t len) {
+	while (0 < this->getStatusTxFull()) {;}
 	spi->setCmd(CMD_W_TX_PAYLOAD_NOACK);
 	spi->setCmdData(buf, len);
 	spi->spiTransfer(len+1);

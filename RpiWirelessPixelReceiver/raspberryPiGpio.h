@@ -15,8 +15,8 @@ class RaspberryPiGpio:public Gpio
 public:
 	RaspberryPiGpio();
 	~RaspberryPiGpio();
-	void setPin(uint8_t p);
-	uint8_t setPinState(uint8_t s);
+	void setPin(uint8_t p) override;
+	uint8_t setPinState(uint8_t s) override;
 
 private:
 	int pin;

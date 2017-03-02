@@ -7,6 +7,14 @@ nrf24l01/atmRelease
 nrf24l01/attRelease
 nrf24l01/rspRelease
 nrf24l01/rsp1Release
+bdcstWirelessPixelReceiver/atmRelease
+bdcstWirelessPixelReceiver/attRelease
+bdcstWirelessPixelReceiver/rspRelease
+bdcstWirelessPixelReceiver/rsp1Release
+bdcstWirelessPixelTransmitter/atmRelease
+bdcstWirelessPixelTransmitter/attRelease
+bdcstWirelessPixelTransmitter/rspRelease
+bdcstWirelessPixelTransmitter/rsp1Release
 RpiWirelessPixel/rspRelease
 RpiWirelessPixel/rsp1Release
 RpiWirelessPixelReceiver/rspRelease

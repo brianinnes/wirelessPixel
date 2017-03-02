@@ -23,7 +23,8 @@ void nrf24l01Data::initialise() {
 	radio->setRfPwr(rf_pwr_enum::RF_PWR_MIN);
 	radio->setArd(0x02);
 	radio->setArc(0x05);
-	radio->setRfDrHigh(0x01);
+	radio->setRfDrLow(0x00);
+	radio->setRfDrHigh(0x00);
 	radio->setEnDpl(0x01);
 	radio->setDplP0(0x01);
 	radio->setEnAckPay(0x01);

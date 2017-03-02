@@ -12,13 +12,13 @@ class ATMegaSpi:public Spi
 public:;
 	ATMegaSpi();
 	~ATMegaSpi();
-	uint8_t init();
-	void close();
-	void setCmd(uint8_t cmd);
-	void setCmdData(uint8_t *buf, uint8_t len);
-	void getCmdData(uint8_t *buf, uint8_t len);
-	uint8_t getStatus();
-	uint8_t spiTransfer(uint8_t len);
+	uint8_t init() override;
+	void close() override;
+	void setCmd(uint8_t cmd) override;
+	void setCmdData(uint8_t *buf, uint8_t len) override;
+	void getCmdData(uint8_t *buf, uint8_t len) override;
+	uint8_t getStatus() override;
+	uint8_t spiTransfer(uint8_t len) override;
 
 
 protected:

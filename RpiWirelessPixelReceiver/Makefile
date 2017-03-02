@@ -1,4 +1,4 @@
-CXXSRC = raspberryPiSpi.cpp raspberryPiGpio.cpp main.cpp
+CXXSRC = raspberryPiSpi.cpp raspberryPiGpio.cpp raspberryPiLedControl.cpp raspberryPiPersist.cpp main.cpp
 ARM_OBJS    = $(CXXSRC:%.cpp=rspRelease/%.o)
 AR6_OBJS    = $(CXXSRC:%.cpp=rsp1Release/%.o)
 RSP_TARGET = rspRelease/RpiWirelessPixelReceiver
@@ -7,10 +7,10 @@ RSP1_TARGET = rsp1Release/RpiWirelessPixelReceiver
 include ../rules.mk
 include ../local.mk
 
-RSP_EXTRAINCDIRS = ../nrf24l01
-RSP_LDFLAGS += -lnrf24l01 -L../nrf24l01/rspRelease
-RSP1_EXTRAINCDIRS = ../nrf24l01
-RSP1_LDFLAGS += -lnrf24l01 -L../nrf24l01/rsp1Release
+RSP_EXTRAINCDIRS = ../nrf24l01 ../bdcstWirelessPixelReceiver
+RSP_LDFLAGS += -lbdcstWirelessPixelReceiver -L ../bdcstWirelessPixelReceiver/rspRelease -lnrf24l01 -L../nrf24l01/rspRelease
+RSP1_EXTRAINCDIRS = ../nrf24l01 ../bdcstWirelessPixelReceiver
+RSP1_LDFLAGS += -lbdcstWirelessPixelReceiver -L ../bdcstWirelessPixelReceiver/rsp1Release -lnrf24l01 -L../nrf24l01/rsp1Release
 
 all: directories $(RSP_TARGET) $(RSP_TARGET).lss $(RSP_TARGET).sym $(RSP1_TARGET) $(RSP1_TARGET).lss $(RSP1_TARGET).sym
 

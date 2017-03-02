@@ -15,8 +15,8 @@ class attinyGpio:public Gpio
 public:
 	attinyGpio();
 	~attinyGpio();
-	void setPin(uint8_t p);
-	uint8_t setPinState(uint8_t s);
+	void setPin(uint8_t p) override;
+	uint8_t setPinState(uint8_t s) override;
 
 private:
 	uint8_t pin;

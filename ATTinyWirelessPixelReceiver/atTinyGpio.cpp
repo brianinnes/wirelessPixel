@@ -1,5 +1,4 @@
 #include <avr/io.h>
-
 #include "atTinyGpio.h"
 
 void attinyGpio::setPin(uint8_t P) {

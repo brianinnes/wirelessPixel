@@ -1,4 +1,4 @@
-#include "nrf24l01Data.h"
+#include "bdcstWirelessPixelTransmitter.h"
 #include "raspberryPiSpi.h"
 #include "raspberryPiGpio.h"
 //#include <unistd.h>
@@ -13,44 +13,87 @@ int main(void)
 {
 	Gpio *g = new RaspberryPiGpio();
 	g->setPin(25);
-	nrf24l01 *rf24 = new nrf24l01(new RaspberryPiSpi(), g);
-	nrf24l01Data *rf24d = new nrf24l01Data(rf24);
+	bdcstWPTrans *pixel = new bdcstWPTrans(new RaspberryPiSpi(), g);
 
-	rf24d->initialise();
+	pixel->init();
 
 	srand(time(NULL));
 
-	char msg[] = "AAA";
-
-	char i = 0;
-	char j = 0;
 	while (true) {
-		//for (char i = 0; i < 20; i++) {
-		i ++;
-		j++;
-		if (i > 5) {
-			i = 0;
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			cout << "Message sent : ";
+			cout << "Set Colour = ";
+			cout << (int)colour;
+			cout << std::endl;
+			pixel->setColour(colour);
+			this_thread::sleep_for(chrono::milliseconds(1000));
 		}
-		if (j > 2) {
-			j = 0;
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			cout << "Message sent : ";
+			cout << "Fade Colour to = ";
+			cout << (int)colour;
+			cout << std::endl;
+			pixel->fadeColour(colour, 50);
+			this_thread::sleep_for(chrono::milliseconds(1000));
 		}
+		cout << "Loop Sequence" << std::endl;
+		pixel->loopSequence(0);
+		this_thread::sleep_for(chrono::milliseconds(5000));
+		cout << "Loop Fading Sequence" << std::endl;
+		pixel->loopFadeSequence(0, 50);
+		this_thread::sleep_for(chrono::milliseconds(5000));
+		pixel->setColour(0);
+		this_thread::sleep_for(chrono::milliseconds(5000));
 
-		msg[0] = rand() % 200 + 50;
-		msg[1] = rand() % 200 + 50;
-		msg[2] = rand() % 200 + 50;
+		cout << "Half brightness colours" << std::endl;
+		pixel->updateColour(1, 128, 0, 0);
+		pixel->updateColour(2, 0, 128, 0);
+		pixel->updateColour(3, 0, 0, 128);
+		pixel->updateColour(4, 128, 128, 0);
+		pixel->updateColour(5, 128, 0, 128);
+		pixel->updateColour(6, 0, 128, 128);
+		pixel->updateColour(7, 128, 128, 128);
 
-		cout << "Message sent : ";
-		for (int a = 0; a < 3; a++) {
-			cout << (int)msg[a];
-			cout << ", ";
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			cout << "Message sent : ";
+			cout << "Set Colour = ";
+			cout << (int)colour;
+			cout << std::endl;
+			pixel->setColour(colour);
+			this_thread::sleep_for(chrono::milliseconds(1000));
 		}
-		cout << std::endl;
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			cout << "Message sent : ";
+			cout << "Fade Colour to = ";
+			cout << (int)colour;
+			cout << std::endl;
+			pixel->fadeColour(colour, 50);
+			this_thread::sleep_for(chrono::milliseconds(1000));
+		}
+		cout << "Loop Sequence" << std::endl;
+		pixel->loopSequence(0);
+		this_thread::sleep_for(chrono::milliseconds(5000));
+		cout << "Loop Fading Sequence" << std::endl;
+		pixel->loopFadeSequence(0, 50);
+		this_thread::sleep_for(chrono::milliseconds(5000));
+		pixel->setColour(0);
+		this_thread::sleep_for(chrono::milliseconds(5000));
 
-		rf24d->broadcast((uint8_t *)msg, 3);
-		this_thread::sleep_for(chrono::milliseconds(1000));
+		cout << "Full brightness colours" << std::endl;
+		pixel->updateColour(1, 255, 0, 0);
+		pixel->updateColour(2, 0, 255, 0);
+		pixel->updateColour(3, 0, 0, 255);
+		pixel->updateColour(4, 255, 255, 0);
+		pixel->updateColour(5, 255, 0, 255);
+		pixel->updateColour(6, 0, 255, 255);
+		pixel->updateColour(7, 255, 255, 128);
 	}
-	delete rf24;
-	rf24 = NULL;
+	delete pixel;
+	pixel = NULL;
 	delete g;
 	g = NULL;
 

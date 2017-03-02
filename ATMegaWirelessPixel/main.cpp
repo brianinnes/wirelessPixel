@@ -1,4 +1,4 @@
-#include "nrf24l01Data.h"
+#include "bdcstWirelessPixelTransmitter.h"
 #include "atMegaSpi.h"
 #include "atMegaGpio.h"
 #include <avr/io.h>
@@ -11,37 +11,65 @@ int main(void)
 {
 	Gpio *ce = new atMegaGpio();
 	ce->setPin(PB1); //d9
-	nrf24l01 *rf24 = new nrf24l01(new ATMegaSpi(), ce);
-	nrf24l01Data *rf24d = new nrf24l01Data(rf24);
-
-	rf24d->initialise();
+	bdcstWPTrans *pixel = new bdcstWPTrans(new ATMegaSpi(), ce);
+	pixel->init();
 
 	srand(57);
 
-	char msg[] = "AAA";
-
-	char i = 0;
-	char j = 0;
 	while (true) {
-		i ++;
-		j++;
-		if (i > 5) {
-			i = 0;
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			pixel->setColour(colour);
+			_delay_ms(1000);
 		}
-		if (j > 2) {
-			j = 0;
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			pixel->fadeColour(colour, 50);
+			_delay_ms(1000);
 		}
+		pixel->loopSequence(0);
+		_delay_ms(5000);
+		pixel->loopFadeSequence(0, 50);
+		_delay_ms(5000);
+		pixel->setColour(0);
+		_delay_ms(5000);
 
-		msg[0] = rand() % 200 + 50;
-		msg[1] = rand() % 200 + 50;
-		msg[2] = rand() % 200 + 50;
+		pixel->updateColour(1, 128, 0, 0);
+		pixel->updateColour(2, 0, 128, 0);
+		pixel->updateColour(3, 0, 0, 128);
+		pixel->updateColour(4, 128, 128, 0);
+		pixel->updateColour(5, 128, 0, 128);
+		pixel->updateColour(6, 0, 128, 128);
+		pixel->updateColour(7, 128, 128, 128);
 
-		rf24d->broadcast((uint8_t *)msg, 3);
-		_delay_ms(1000);
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			pixel->setColour(colour);
+			_delay_ms(1000);
+		}
+		for (int i = 0; i < 10; i++) {
+			uint8_t colour = (uint8_t)(rand() % 8);
+			pixel->fadeColour(colour, 50);
+			_delay_ms(1000);
+		}
+		pixel->loopSequence(0);
+		_delay_ms(5000);
+		pixel->loopFadeSequence(0, 50);
+		_delay_ms(5000);
+		pixel->setColour(0);
+		_delay_ms(5000);
+
+		pixel->updateColour(1, 255, 0, 0);
+		pixel->updateColour(2, 0, 255, 0);
+		pixel->updateColour(3, 0, 0, 255);
+		pixel->updateColour(4, 255, 255, 0);
+		pixel->updateColour(5, 255, 0, 255);
+		pixel->updateColour(6, 0, 255, 255);
+		pixel->updateColour(7, 255, 255, 128);
 	}
 
-	delete rf24;
-	rf24 = NULL;
+	delete pixel;
+	pixel = NULL;
 	delete ce;
 	ce = NULL;
 
