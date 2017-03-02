@@ -65,7 +65,7 @@ int main(void)
 		pixel->updateColour(4, 255, 255, 0);
 		pixel->updateColour(5, 255, 0, 255);
 		pixel->updateColour(6, 0, 255, 255);
-		pixel->updateColour(7, 255, 255, 128);
+		pixel->updateColour(7, 255, 255, 255);
 	}
 
 	delete pixel;
