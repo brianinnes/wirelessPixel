@@ -16,6 +16,12 @@ int main(void)
 
 	srand(57);
 
+	//uint8_t seq2[] = {(1<<5)+5, (0<<5)+5, (1<<5)+5, (0<<5)+5, (1<<5)+5, (0<<5)+5};
+	//pixel->updateSequence(2, 2, seq2);
+	//pixel->storeUpdates();
+	//pixel->loopSequence(2);
+	//_delay_ms(5000);
+
 	while (true) {
 		for (int i = 0; i < 10; i++) {
 			uint8_t colour = (uint8_t)(rand() % 8);
@@ -27,9 +33,9 @@ int main(void)
 			pixel->fadeColour(colour, 50);
 			_delay_ms(1000);
 		}
-		pixel->loopSequence(0);
+		pixel->loopSequence(1);
 		_delay_ms(5000);
-		pixel->loopFadeSequence(0, 50);
+		pixel->loopFadeSequence(1, 50);
 		_delay_ms(5000);
 		pixel->setColour(0);
 		_delay_ms(5000);
@@ -52,9 +58,9 @@ int main(void)
 			pixel->fadeColour(colour, 50);
 			_delay_ms(1000);
 		}
-		pixel->loopSequence(0);
+		pixel->loopSequence(1);
 		_delay_ms(5000);
-		pixel->loopFadeSequence(0, 50);
+		pixel->loopFadeSequence(1, 50);
 		_delay_ms(5000);
 		pixel->setColour(0);
 		_delay_ms(5000);

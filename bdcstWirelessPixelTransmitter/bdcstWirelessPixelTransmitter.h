@@ -27,7 +27,14 @@ public:
 	void updateColour(uint8_t col, uint8_t r, uint8_t g, uint8_t b, uint16_t id);
 	void updateSequence(uint8_t seq, uint8_t num, uint8_t steps[]);
 	void updateSequence(uint8_t seq, uint8_t num, uint8_t steps[], uint16_t id);
-
+	void setRGBColour(uint8_t r, uint8_t g, uint8_t b);
+	void setRGBColour(uint8_t r, uint8_t g, uint8_t b, uint16_t id);
+	void fadeRGBColour(uint8_t r, uint8_t g, uint8_t b, uint8_t time);
+	void fadeRGBColour(uint8_t r, uint8_t g, uint8_t b, uint8_t time, uint16_t id);
+	void storeUpdates();
+	void storeUpdates(uint16_t id);
+	void setID(uint16_t newID);
+	void setID(uint16_t newID, uint16_t id);
 private:
 	Spi *sp;
 	Gpio *gp;

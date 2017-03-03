@@ -41,6 +41,7 @@ ATT_HEXSIZE = $(AVR_SIZE) --target=ihex $(TARGET).hex
 ATT_ELFSIZE = $(AVR_SIZE) -AC --mcu=attiny85 $(TARGET).elf
 ATT_FORMAT = ihex
 ATT_AVRDUDE_WRITE_FLASH = -pt85 -U flash:w:$(TARGET).hex:i
+ATT_AVRDUDE_WRITE_EEPROM = -pt85 -U eeprom:w:$(TARGET).eep:i
 ATT_AVRDUDE_FUSES = -pt85 -D -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
 
 ATM_CLOCK = 16000000L
@@ -159,7 +160,7 @@ attRelease/%.eep: attRelease/%.elf
 	@echo
 	@echo $(MSG_EEPROM) $@
 	- $(AVR_OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-	--change-section-lma .eeprom=0 -O $(FORMAT) $< $@
+	--change-section-lma .eeprom=0 -O $(ATT_FORMAT) $< $@
 
 attRelease/%.lss: attRelease/%.elf
 	@echo

@@ -1,5 +1,6 @@
 #include "bdcstWirelessPixelReceiver.h"
 #include <string.h>
+#include <stddef.h>
 
 #define SETCOLOUR 0x00
 #define FADECOLOUR 0x08
@@ -10,24 +11,16 @@
 #define UPDATECOLOUR 0x30
 #define UPDATESEQ 0x38
 #define MISCCOMMAND 0x40
-#define PLAYRGBSEQ 0x50
-#define FADERGBSEQ 0x58
-#define LOOPRGBSEQ 0x60
-#define LOOPFADERGBSEQ 0x68
-#define UPDATERGBSEQ 0x70
-#define UPDATERGBSEQCONT 0x71
+#define MISC_SETRGB (uint8_t)0x00
+#define MISC_FADERGB (uint8_t)0x01
+#define MISC_STORE (uint8_t)0x02
+#define MISC_ID (uint8_t)0x03
+
+
 
 //using namespace std;
 
-bdcstWPRec::bdcstWPRec(Spi *sp, Gpio *gp, Persist *st, LedControl *lc)  : stdColours {
-  {0, 0, 0},
-  {255, 0, 0},
-  {0, 255, 0},
-  {0, 0, 255},
-  {255, 255, 0},
-  {255,0, 255},
-  {0, 255, 255},
-  {255, 255, 255}} {
+bdcstWPRec::bdcstWPRec(Spi *sp, Gpio *gp, Persist *st, LedControl *lc) {
     this->sp = sp;
     this->gp = gp;
     this->st = st;
@@ -40,16 +33,13 @@ bdcstWPRec::bdcstWPRec(Spi *sp, Gpio *gp, Persist *st, LedControl *lc)  : stdCol
   }
 
   void bdcstWPRec::init() {
-    const uint8_t s[] = {(1<<5)+5, (2<<5)+5, (3<<5)+5, (0<<5)+1};
-    for (int i = 0; i < MAXSEQ; i++) {
-      this->stdSequences.numItems[i] = 0;
-      this->stdSequences.items[i] = 0;
-    }
-    this->stdSequences.numItems[0] = 4;
-    this->stdSequences.items[0] = (uint8_t *)malloc(4);
-    memcpy(this->stdSequences.items[0], s, sizeof(s));
+    this->gID =  this->st->getGID();
+    this->st->getStandardColours((uint8_t *)this->stdColours);
+//    this->st->getSequences(&(this->stdSequences), &(this->rgbSequences));
+    this->st->getSequences(&(this->stdSequences));
 
     this->lc->init();
+
     this->rf24 = new nrf24l01(this->sp, this->gp);
     this->rf24d = new nrf24l01Data(this->rf24);
     this->rf24d->initialise();
@@ -114,24 +104,6 @@ bdcstWPRec::bdcstWPRec(Spi *sp, Gpio *gp, Persist *st, LedControl *lc)  : stdCol
             case MISCCOMMAND:
             this->miscCommand(buf, len);
             break;
-            case PLAYRGBSEQ:
-            this->playRGBSeq(buf);
-            break;
-            case FADERGBSEQ:
-            this->fadeRGBSeq(buf, len);
-            break;
-            case LOOPRGBSEQ:
-            this->loopRGBSeq(buf);
-            break;
-            case LOOPFADERGBSEQ:
-            this->loopFadeRGBSeq(buf, len);
-            break;
-            case UPDATERGBSEQ:
-            this->updateRGBSeq(buf, len);
-            break;
-            case UPDATERGBSEQCONT:
-            this->updateRGBSeqCont(buf, len);
-            break;
             default :
             ;
           }
@@ -164,9 +136,13 @@ void bdcstWPRec::_fadeLEDColour(uint8_t r, uint8_t g, uint8_t b, uint8_t time) {
 
 void bdcstWPRec::_playStdSequence(uint8_t s) {
   if (this->stdSequences.numItems[s] > 0) {
+    uint16_t counter = 0;
+    for (int i = 0; i < s; i++) {
+      counter += this->stdSequences.numItems[i];
+    }
     for (int i = 0; i < this->stdSequences.numItems[s]; i++) {
-      uint8_t col = (this->stdSequences.items[s][i]) >> 5;
-      uint8_t delay = (this->stdSequences.items[s][i]) & 0x1F;
+      uint8_t col = (this->stdSequences.items[counter + i]) >> 5;
+      uint8_t delay = (this->stdSequences.items[counter + i]) & 0x1F;
       this->_setLEDColour(this->stdColours[col][0],
                           this->stdColours[col][1],
                           this->stdColours[col][2]);
@@ -177,9 +153,13 @@ void bdcstWPRec::_playStdSequence(uint8_t s) {
 
 void bdcstWPRec::_fadeStdSequence(uint8_t s, uint8_t time) {
   if (this->stdSequences.numItems[s] > 0) {
+    uint16_t counter = 0;
+    for (int i = 0; i < s; i++) {
+      counter += this->stdSequences.numItems[i];
+    }
     for (int i = 0; i < this->stdSequences.numItems[s]; i++) {
-      uint8_t col = (this->stdSequences.items[s][i]) >> 5;
-      uint8_t delay = (this->stdSequences.items[s][i]) & 0x1F;
+      uint8_t col = (this->stdSequences.items[counter + i]) >> 5;
+      uint8_t delay = (this->stdSequences.items[counter + i]) & 0x1F;
       this->_fadeLEDColour(this->stdColours[col][0],
                           this->stdColours[col][1],
                           this->stdColours[col][2],
@@ -253,43 +233,70 @@ void bdcstWPRec::updateColour(uint8_t *params, uint8_t len) {
 void bdcstWPRec::updateSeq(uint8_t *params, uint8_t len) {
   uint8_t seq = params[1] & 0x07;
   uint8_t num = params[2];
-  if ((num+3) == len) {
-    if (this->stdSequences.numItems[seq] > 0) {
-      free(this->stdSequences.items[seq]);
-      this->stdSequences.items[seq] = 0;
+  if (num+3 == len) {
+    uint16_t start = 0;
+    uint16_t end = 0;
+    int16_t diff = num - this->stdSequences.numItems[seq];
+    for (int i = 0; i < seq; i++) {
+      start += this->stdSequences.numItems[i];
     }
-    this->stdSequences.items[seq] = (uint8_t *)malloc(num);
-    for (int i = 0; i < num; i++) {
-      this->stdSequences.items[seq][i] = params[3+i];
+    for (int i = 0; i < MAXSEQ; i++) {
+      end += this->stdSequences.numItems[i];
+    }
+    //move other sequences to make correct size for this sequence
+    if ((end + diff) <= (MAXSEQ*STDITEMS)) {
+      // There is space, so move if required and add this new sequence
+      if ((diff != 0) && (0 < end - start - this->stdSequences.numItems[seq])) {
+        memmove(&(this->stdSequences.items[start + num]), &(this->stdSequences.items[start + this->stdSequences.numItems[seq]]), end - start - this->stdSequences.numItems[seq]);
+      }
+      this->stdSequences.numItems[seq] = num;
+      for (int i = 0; i < num; i++) {
+        this->stdSequences.items[start + i] = params[3+i];
+      }
     }
   }
 }
 
 
 void bdcstWPRec::miscCommand(uint8_t *params, uint8_t len) {
-
+  uint8_t cmd = params[1] & 0x0F;
+  switch (cmd) {
+    case MISC_SETRGB :
+    this->setRGBColour(params, len);
+    break;
+    case MISC_FADERGB:
+    this->fadeRGBColour(params, len);
+    break;
+    case MISC_STORE:
+    this->storeUpdates();
+    break;
+    case MISC_ID:
+    this->setID(params, len);
+    default:
+    break;
+  }
 }
 
-void bdcstWPRec::playRGBSeq(uint8_t *params) {
-
+void bdcstWPRec::setRGBColour(uint8_t *params, uint8_t len) {
+  if (5 == len) {
+    _setLEDColour(params[2], params[3], params[4]);
+  }
 }
 
-void bdcstWPRec::fadeRGBSeq(uint8_t *params, uint8_t len) {
-
+void bdcstWPRec::fadeRGBColour(uint8_t *params, uint8_t len) {
+  if (6 == len) {
+    _fadeLEDColour(params[2], params[3], params[4], params[5]);
+  }
 }
 
-void bdcstWPRec::loopRGBSeq(uint8_t *params) {
-
+void bdcstWPRec::storeUpdates() {
+  this->st->setGID(this->gID);
+  this->st->setStandardColours((uint8_t *)this->stdColours);
+  this->st->setSequences(&(this->stdSequences));
 }
 
-void bdcstWPRec::loopFadeRGBSeq(uint8_t *params, uint8_t len) {
-
-}
-
-void bdcstWPRec::updateRGBSeq(uint8_t *params, uint8_t len) {
-
-}
-
-void bdcstWPRec::updateRGBSeqCont(uint8_t *params, uint8_t len) {
-
+void bdcstWPRec::setID(uint8_t *params, uint8_t len) {
+  if (4 == len) {
+    this->gID = (params[2] << 8) + params[3];
+  }
 }

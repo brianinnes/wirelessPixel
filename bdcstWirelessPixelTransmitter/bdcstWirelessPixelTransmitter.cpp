@@ -11,12 +11,16 @@
 #define C_UCOLOUR (uint8_t)0x30
 #define C_USEQ (uint8_t)0x38
 #define C_MISCCOMMAND (uint8_t)0x40
-#define C_PLAYRGBSEQ (uint8_t)0x50
-#define C_FADERGBSEQ (uint8_t)0x58
-#define C_LOOPRGBSEQ (uint8_t)0x60
-#define C_LOOPFADERGBSEQ (uint8_t)0x68
-#define C_UPDATERGBSEQ (uint8_t)0x70
-#define C_UPDATERGBSEQCONT (uint8_t)0x71
+#define C_MISC_SETRGB (uint8_t)0x00
+#define C_MISC_FADERGB (uint8_t)0x01
+#define C_MISC_STORE (uint8_t)0x02
+#define C_MISC_ID (uint8_t)0x03
+//#define C_PLAYRGBSEQ (uint8_t)0x50
+//#define C_FADERGBSEQ (uint8_t)0x58
+//#define C_LOOPRGBSEQ (uint8_t)0x60
+//#define C_LOOPFADERGBSEQ (uint8_t)0x68
+//#define C_UPDATERGBSEQ (uint8_t)0x70
+//#define C_UPDATERGBSEQCONT (uint8_t)0x71
 
 
 bdcstWPTrans::bdcstWPTrans(Spi *sp, Gpio *gp) {
@@ -134,5 +138,52 @@ void bdcstWPTrans::updateSequence(uint8_t seq, uint8_t num, uint8_t steps[], uin
   for (uint8_t i = 0; i< num; i++) {
     msg[4+i] = steps[i];
   }
+  this->radioD->broadcast(msg, 4+num);
+}
 
-  this->radioD->broadcast(msg, 4+num);}
+void bdcstWPTrans::setRGBColour(uint8_t r, uint8_t g, uint8_t b){
+  uint8_t cmd = BDCAST | C_MISCCOMMAND | C_MISC_SETRGB;
+  uint8_t msg[] = { cmd, r, g, b };
+  this->radioD->broadcast(msg, 4);
+}
+
+void bdcstWPTrans::setRGBColour(uint8_t r, uint8_t g, uint8_t b, uint16_t id){
+  uint8_t cmd = GROUP | C_MISCCOMMAND | C_MISC_SETRGB;
+  uint8_t msg[] = { cmd, (uint8_t)(id >> 8), (uint8_t)id, r, g, b };
+  this->radioD->broadcast(msg, 6);
+}
+
+void bdcstWPTrans::fadeRGBColour(uint8_t r, uint8_t g, uint8_t b, uint8_t time){
+  uint8_t cmd = BDCAST | C_MISCCOMMAND | C_MISC_FADERGB;
+  uint8_t msg[] = { cmd, r, g, b, time };
+  this->radioD->broadcast(msg, 5);
+}
+
+void bdcstWPTrans::fadeRGBColour(uint8_t r, uint8_t g, uint8_t b, uint8_t time, uint16_t id){
+  uint8_t cmd = GROUP | C_MISCCOMMAND | C_MISC_FADERGB;
+  uint8_t msg[] = { cmd, (uint8_t)(id >> 8), (uint8_t)id, r, g, b, time };
+  this->radioD->broadcast(msg, 7);
+}
+
+void bdcstWPTrans::storeUpdates(){
+  uint8_t cmd = BDCAST | C_MISCCOMMAND | C_MISC_STORE;
+  this->radioD->broadcast(&cmd, 1);
+}
+
+void bdcstWPTrans::storeUpdates(uint16_t id){
+  uint8_t cmd = GROUP | C_MISCCOMMAND | C_MISC_STORE;
+  uint8_t msg[] = { cmd, (uint8_t)(id >> 8), (uint8_t)id};
+  this->radioD->broadcast(msg, 3);
+}
+
+void bdcstWPTrans::setID(uint16_t newID) {
+  uint8_t cmd = BDCAST | C_MISCCOMMAND | C_MISC_ID;
+  uint8_t msg[] = { cmd, (uint8_t)(newID >> 8), (uint8_t)newID};
+  this->radioD->broadcast(msg, 3);
+}
+
+void bdcstWPTrans::setID(uint16_t newID, uint16_t id) {
+  uint8_t cmd = GROUP | C_MISCCOMMAND | C_MISC_ID;
+  uint8_t msg[] = { cmd, (uint8_t)(id >> 8), (uint8_t)id, (uint8_t)(newID >> 8), (uint8_t)newID};
+  this->radioD->broadcast(msg, 5);
+}

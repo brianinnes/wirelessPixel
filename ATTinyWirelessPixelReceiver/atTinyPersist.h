@@ -7,12 +7,12 @@ class attinyPersist:public Persist
 {
   uint16_t getGID() override;
   void setGID(uint16_t col) override;
-  uint8_t *getStandardColours() override;
-  void setStandardColours(uint8_t col[]) override;
-  uint8_t *getStandardSequence(uint8_t s) override;
-  void setStandardSequence(uint8_t s, uint8_t seq[]) override;
-  uint8_t *getRGBSequence(uint8_t s) override;
-  void setRGBSequence(uint8_t s, uint8_t seq[]) override;
+  void getStandardColours(uint8_t *buff) override;
+  void setStandardColours(uint8_t *buff) override;
+//  void getSequences(StdSequence *std, RGBSequence *rgb) override;
+//  void setSequences(StdSequence *std, RGBSequence *rgb) override;
+  void getSequences(StdSequence *std) override;
+  void setSequences(StdSequence *std) override;
 };
 
 #endif // ATTINYPERSIST_H_
