@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
-
 #include "atMegaSpi.h"
-//using namespace std;
+
 #define DDR_SPI     DDRB
 #define DD_MISO     DDB4
 #define DD_MOSI     DDB3

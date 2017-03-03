@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <string.h>
 #include <pwd.h>
-//#include <stdio.h>
 #include <unistd.h>
 #include <iostream>
 #include <fstream>
@@ -23,7 +22,6 @@ uint8_t defaultStdColours[8][3] = {
 StdSequence defaultStdSequences = {
     {4, 4, 0, 0, 0, 0, 0, 0},
     {(1<<5)+5, (2<<5)+5, (3<<5)+5, (0<<5)+1, (4<<5)+2, (5<<5)+2, (6<<5)+2, (7<<5)+2}};
-// RGBSequence defaultRgbSequences = {{0, 0, 0, 0, 0, 0, 0, 0}, {}};
 
 
 raspberryPiPersist::raspberryPiPersist() {
@@ -33,7 +31,6 @@ raspberryPiPersist::raspberryPiPersist() {
   this->gIDPath = path + "/gID.bin";
   this->stdColourPath = path + "/stdColour.bin";
   this->stdSeqPath = path + "/stdSeq.bin";
-//  this->rgbSeqPath = path + "/rgbSeq.bin";
 }
 
 uint16_t raspberryPiPersist::getGID() {
@@ -76,31 +73,20 @@ void raspberryPiPersist::setStandardColours(uint8_t *buff) {
   myfile.close();
 }
 
-//void raspberryPiPersist::getSequences(StdSequence *std, RGBSequence *rgb) {
 void raspberryPiPersist::getSequences(StdSequence *std) {
   ifstream myfile(this->stdSeqPath.c_str(), ios::in|ios::binary);
   if (myfile.is_open()) {
     myfile.seekg(0, ios::beg);
     myfile.read((char *)std, sizeof(StdSequence));
     myfile.close();
-//    ifstream myfile(this->rgbSeqPath.c_str(), ios::in|ios::binary);
-//    myfile.seekg(0, ios::beg);
-//    myfile.read((char *)rgb, sizeof(RGBSequence));
-//    myfile.close();
   } else {
-//    this->setSequences(&defaultStdSequences, &defaultRgbSequences);
     this->setSequences(&defaultStdSequences);
     memcpy(std, &defaultStdSequences, sizeof(StdSequence));
-//    memcpy(rgb, &defaultRgbSequences, sizeof(RGBSequence));
   }
 }
 
-//void raspberryPiPersist::setSequences(StdSequence *std, RGBSequence *rgb) {
 void raspberryPiPersist::setSequences(StdSequence *std) {
   ofstream myfile1(this->stdSeqPath.c_str(), ios::binary);
   myfile1.write((char *)std, sizeof(StdSequence));
   myfile1.close();
-//  ofstream myfile2(this->rgbSeqPath.c_str(), ios::binary);
-//  myfile2.write((char *)rgb, sizeof(RGBSequence));
-//  myfile2.close();
 }

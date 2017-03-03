@@ -24,5 +24,4 @@ private:
 };
 
 
-
 #endif /* RASPBERRYPIGPIO_H_ */

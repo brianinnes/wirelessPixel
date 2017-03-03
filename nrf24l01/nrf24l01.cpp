@@ -1,5 +1,4 @@
 #include "nrf24l01.h"
-// #include <unistd.h>
 #include <string.h>
 
 nrf24l01::nrf24l01(Spi *s, Gpio *g) {

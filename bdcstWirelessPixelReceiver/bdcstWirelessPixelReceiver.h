@@ -40,10 +40,8 @@ private:
 	LedControl *lc;
 	uint8_t stdColours[8][3];
 	StdSequence stdSequences;
-	//RGBSequence rgbSequences;
 	uint8_t currColours[3] = {0, 0, 0};
 	uint16_t gID;
 };
-
 
 #endif //BDCSTWPREC_H

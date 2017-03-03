@@ -10,7 +10,6 @@ using namespace std;
 
 int main(void)
 {
-	uint16_t id = 1025;
 	Gpio *g = new RaspberryPiGpio();
 	g->setPin(25);
 	bdcstWPTrans *pixel = new bdcstWPTrans(new RaspberryPiSpi(), g);
@@ -25,8 +24,10 @@ int main(void)
 //	pixel->loopSequence(2);
 //	this_thread::sleep_for(chrono::milliseconds(5000));
 
+//	uint16_t id = 1025;
 //	pixel->setID(id);
-	//pixel->storeUpdates();
+
+//	pixel->storeUpdates();
 
 
 	while (true) {

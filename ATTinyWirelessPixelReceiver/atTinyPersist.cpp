@@ -15,7 +15,6 @@ uint8_t EEMEM stdColours[8][3] = {
 StdSequence EEMEM stdSequences = {
     {4, 4, 0, 0, 0, 0, 0, 0},
     {(1<<5)+5, (2<<5)+5, (3<<5)+5, (0<<5)+1, (4<<5)+2, (5<<5)+2, (6<<5)+2, (7<<5)+2}};
-// RGBSequence EEMEM rgbSequences = {{0, 0, 0, 0, 0, 0, 0, 0}, {}};
 
 uint16_t attinyPersist::getGID() {
   return eeprom_read_word(&gID);;
@@ -33,14 +32,10 @@ void attinyPersist::setStandardColours(uint8_t *buff) {
   eeprom_update_block((const void*)buff, (void*)stdColours, 24);
 }
 
-//void attinyPersist::getSequences(StdSequence *std, RGBSequence *rgb) {
 void attinyPersist::getSequences(StdSequence *std) {
   eeprom_read_block((void*)std, (const void*)&stdSequences , sizeof(StdSequence));
-//  eeprom_read_block((void*)rgb, (const void*)&rgbSequences , sizeof(RGBSequence));
 }
 
-//void attinyPersist::setSequences(StdSequence *std, RGBSequence *rgb) {
 void attinyPersist::setSequences(StdSequence *std) {
   eeprom_update_block((const void*)std, (void*)&stdSequences , sizeof(StdSequence));
-//  eeprom_update_block((const void*)rgb, (void*)&rgbSequences , sizeof(RGBSequence));
 }

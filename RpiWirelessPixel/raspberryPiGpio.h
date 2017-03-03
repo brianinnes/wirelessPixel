@@ -23,6 +23,4 @@ private:
 	int pin_fd;
 };
 
-
-
 #endif /* RASPBERRYPIGPIO_H_ */

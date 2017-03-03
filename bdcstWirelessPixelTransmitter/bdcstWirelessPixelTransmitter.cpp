@@ -15,12 +15,6 @@
 #define C_MISC_FADERGB (uint8_t)0x01
 #define C_MISC_STORE (uint8_t)0x02
 #define C_MISC_ID (uint8_t)0x03
-//#define C_PLAYRGBSEQ (uint8_t)0x50
-//#define C_FADERGBSEQ (uint8_t)0x58
-//#define C_LOOPRGBSEQ (uint8_t)0x60
-//#define C_LOOPFADERGBSEQ (uint8_t)0x68
-//#define C_UPDATERGBSEQ (uint8_t)0x70
-//#define C_UPDATERGBSEQCONT (uint8_t)0x71
 
 
 bdcstWPTrans::bdcstWPTrans(Spi *sp, Gpio *gp) {

@@ -35,7 +35,6 @@ bdcstWPRec::bdcstWPRec(Spi *sp, Gpio *gp, Persist *st, LedControl *lc) {
   void bdcstWPRec::init() {
     this->gID =  this->st->getGID();
     this->st->getStandardColours((uint8_t *)this->stdColours);
-//    this->st->getSequences(&(this->stdSequences), &(this->rgbSequences));
     this->st->getSequences(&(this->stdSequences));
 
     this->lc->init();
