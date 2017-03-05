@@ -2,7 +2,7 @@
 #include "nullGpio.h"
 #include "atTinySpi.h"
 #include "atTinyPersist.h"
-#include "attinyLedControl.h"
+#include "atTinyLedControl.h"
 #include <avr/io.h>
 
 #define NUM_WS2812 1
